@@ -28,10 +28,7 @@ const PORT = process.env.PORT || 5000;
 // Send message for default URL
 app.get('/', (req, res) => res.send('Hello World with Express'));
 
-// Import routes
-let apiRoutes = require("./api-routes");
-
-// testing app
+// routes for testing
 app.get('/customers', (req, res) => {
   const customers = [
     {id: 1, firstName: 'Delphine', lastName: 'Cormier'},
@@ -45,11 +42,22 @@ app.get('/customers', (req, res) => {
 app.get('/programs', (req, res) => {
   const name = req.query.name || 'programs';
   res.setHeader('Content-Type', 'application/json');
-  res.send(JSON.stringify({ saludo: `Greetings ${name}!` }));
+  res.send(JSON.stringify({ greetings: `Greetings ${name}!` }));
 });
 
-// Use Api routes in the App
+
+// Import routes for API
+let apiRoutes = require("./api-routes");
+
+// Configure bodyparser to handle post requests
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(bodyParser.json());
+
+//Using routes 
 app.use('/api', apiRoutes);
+
 
 // Launch app to listen to specified port
 app.listen(PORT, () => `Server running on port ${PORT}`);
